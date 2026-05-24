@@ -162,6 +162,12 @@ export default function Index() {
     <div className="mesh-bg min-h-screen relative">
       <Stars />
 
+      {/* ── AUTHOR BADGE ───────────────────────────────────────────── */}
+      <div className="fixed top-2 left-2 z-50 bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg px-3 py-1.5">
+        <p className="text-[10px] text-slate-400 leading-tight">Сайт создан учеником</p>
+        <p className="text-[11px] text-amber-400 font-medium leading-tight">Л.В. Тимур, 6 кл.</p>
+      </div>
+
       {/* ── NAVBAR ─────────────────────────────────────────────────── */}
       <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
         scrolled ? "bg-[#060e1f]/90 backdrop-blur-xl shadow-lg shadow-black/20" : ""
