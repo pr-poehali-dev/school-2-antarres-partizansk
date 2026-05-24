@@ -289,8 +289,8 @@ export default function Index() {
             </h1>
 
             <p className="text-slate-300 text-xl leading-relaxed mb-10 max-w-xl animate-fade-in-up delay-200">
-              Школа, где каждый ребёнок — звезда. Мы верим в силу творчества, знаний и дружбы.
-              Партизанск, Приморский край.
+              Школа, где каждый ребёнок — звезда. Основана в 1999 году. Мы верим в силу творчества,
+              знаний и дружбы. Партизанск, Приморский край.
             </p>
 
             <div className="flex flex-wrap gap-4 animate-fade-in-up delay-300">
@@ -344,8 +344,11 @@ export default function Index() {
                 <span className="text-gold-gradient italic">и характером</span>
               </h2>
               <p className="text-slate-300 text-lg leading-relaxed mb-6">
-                МБОУ СОШ №2 «Антарес» — одна из ведущих школ города Партизанска. Мы создаём условия для
-                гармоничного развития каждого ученика: интеллектуального, творческого и физического.
+                МБОУ СОШ №2 «Антарес» — образовательный центр города Партизанска, основанный 17 ноября 1999 года.
+                Включает среднее образование, дошкольное воспитание и дополнительные программы на двух корпусах.
+              </p>
+              <p className="text-slate-400 leading-relaxed mb-4">
+                Директор школы — <span className="text-amber-300 font-medium">Морозова Нэлли Викторовна</span>.
               </p>
               <p className="text-slate-400 leading-relaxed mb-8">
                 Наша миссия — воспитать людей, способных мечтать и воплощать мечты в жизнь. Как звёзды
@@ -618,10 +621,11 @@ export default function Index() {
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-4">
               {[
-                { icon: "MapPin", title: "Адрес", value: "г. Партизанск, ул. Школьная, д. 2", sub: "Приморский край" },
-                { icon: "Phone", title: "Телефон", value: "+7 (42363) 4-XX-XX", sub: "Пн–Пт 8:00–17:00" },
-                { icon: "Mail", title: "Электронная почта", value: "school2@partizansk.edu", sub: "Ответ в течение 1 рабочего дня" },
-                { icon: "Clock", title: "Режим работы", value: "Пн–Пт: 7:30 – 19:00", sub: "Сб–Вс: выходной" },
+                { icon: "MapPin", title: "Корпус 1", value: "г. Партизанск, ул. Садовая, 2", sub: "692864, Приморский край" },
+                { icon: "MapPin", title: "Корпус 2", value: "г. Партизанск, ул. Лазо, 6", sub: "Приморский край" },
+                { icon: "Phone", title: "Телефоны", value: "+7 (42363) 6-76-53  •  6-70-29  •  6-56-71", sub: "Пн–Пт 8:00–17:00" },
+                { icon: "Mail", title: "Электронная почта", value: "antares.pgo@gmail.com", sub: "Ответ в течение 1 рабочего дня" },
+                { icon: "Clock", title: "Режим работы", value: "Пн–Пт: 7:30 – 18:00", sub: "Сб–Вс: выходной" },
               ].map((c) => (
                 <div key={c.title} className="flex items-start gap-4 bg-white/3 border border-white/10 rounded-2xl p-5 card-hover">
                   <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
