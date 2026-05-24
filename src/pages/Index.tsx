@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import Icon from "@/components/ui/icon";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
-type Section = "home" | "about" | "teachers" | "schedule" | "parents" | "contacts" | "gallery" | "news";
+type Section = "home" | "about" | "teachers" | "schedule" | "parents" | "contacts" | "news";
 
 // ── Data ───────────────────────────────────────────────────────────────────────
 const NAV_ITEMS: { id: Section; label: string }[] = [
@@ -12,7 +12,6 @@ const NAV_ITEMS: { id: Section; label: string }[] = [
   { id: "schedule", label: "Расписание" },
   { id: "parents", label: "Родителям" },
   { id: "news", label: "Новости" },
-  { id: "gallery", label: "Галерея" },
   { id: "contacts", label: "Контакты" },
 ];
 
@@ -42,14 +41,7 @@ const SCHEDULE = [
   { time: "13:25", lesson: "7 урок", duration: "45 мин" },
 ];
 
-const GALLERY_ITEMS = [
-  { emoji: "🎨", title: "День творчества", color: "from-amber-500/20 to-orange-600/20" },
-  { emoji: "🏅", title: "Спортивный праздник", color: "from-sky-500/20 to-blue-600/20" },
-  { emoji: "🎭", title: "Театральный фестиваль", color: "from-violet-500/20 to-purple-600/20" },
-  { emoji: "🔬", title: "Научная выставка", color: "from-emerald-500/20 to-green-600/20" },
-  { emoji: "🎵", title: "Музыкальный вечер", color: "from-pink-500/20 to-rose-600/20" },
-  { emoji: "📚", title: "Библиотечный день", color: "from-yellow-500/20 to-amber-600/20" },
-];
+
 
 // ── Stars ──────────────────────────────────────────────────────────────────────
 function Stars() {
@@ -312,9 +304,9 @@ export default function Index() {
 
             <div className="grid grid-cols-3 gap-6 mt-16 animate-fade-in-up delay-400">
               {[
-                { value: "30+", label: "лет работы" },
-                { value: "600+", label: "учеников" },
-                { value: "40+", label: "педагогов" },
+                { value: "10+", label: "лет стажа" },
+                { value: "200+", label: "учеников" },
+                { value: "60+", label: "педагогов" },
               ].map((s) => (
                 <div key={s.label} className="text-center">
                   <div className="font-display text-4xl font-bold text-gold-gradient">{s.value}</div>
@@ -566,42 +558,6 @@ export default function Index() {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── GALLERY ────────────────────────────────────────────────── */}
-      <section ref={setRef("gallery")} className="py-24 relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="section-divider w-full mb-16" />
-
-          <div className="text-center mb-14">
-            <div className="text-amber-500/60 text-xs uppercase tracking-widest mb-4">Воспоминания</div>
-            <h2 className="font-display text-5xl font-bold text-white">
-              Школьная <span className="text-gold-gradient italic">галерея</span>
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {GALLERY_ITEMS.map((item, i) => (
-              <div
-                key={item.title}
-                className={`relative group bg-gradient-to-br ${item.color} border border-white/10 hover:border-amber-500/40 rounded-3xl overflow-hidden cursor-pointer card-hover`}
-                style={{ aspectRatio: i === 0 || i === 3 ? "4/3" : "1" }}
-              >
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
-                  <div className="text-5xl mb-3 group-hover:scale-110 transition-transform duration-300">{item.emoji}</div>
-                  <div className="text-white font-medium text-sm">{item.title}</div>
-                </div>
-                <div className="absolute inset-0 bg-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-8">
-            <button className="border border-amber-500/30 text-amber-400 hover:bg-amber-500/10 px-6 py-3 rounded-2xl text-sm transition-all duration-200">
-              Смотреть все фотографии →
-            </button>
           </div>
         </div>
       </section>
