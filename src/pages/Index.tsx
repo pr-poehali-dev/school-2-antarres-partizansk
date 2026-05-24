@@ -24,13 +24,13 @@ const NEWS = [
 ];
 
 const SCHEDULE = [
-  { time: "08:00", lesson: "1 урок", duration: "45 мин" },
-  { time: "08:50", lesson: "2 урок", duration: "45 мин" },
-  { time: "09:45", lesson: "3 урок", duration: "45 мин" },
-  { time: "10:40", lesson: "4 урок", duration: "45 мин" },
-  { time: "11:35", lesson: "5 урок", duration: "45 мин" },
-  { time: "12:30", lesson: "6 урок", duration: "45 мин" },
-  { time: "13:25", lesson: "7 урок", duration: "45 мин" },
+  { time: "08:15", lesson: "1 урок", duration: "45 мин" },
+  { time: "09:05", lesson: "2 урок", duration: "45 мин" },
+  { time: "10:00", lesson: "3 урок", duration: "45 мин" },
+  { time: "10:55", lesson: "4 урок", duration: "45 мин" },
+  { time: "11:50", lesson: "5 урок", duration: "45 мин" },
+  { time: "12:45", lesson: "6 урок", duration: "45 мин" },
+  { time: "13:40", lesson: "7 урок", duration: "45 мин" },
 ];
 
 
@@ -383,7 +383,7 @@ export default function Index() {
                 Расписание <span className="text-gold-gradient italic">звонков</span>
               </h2>
               <p className="text-slate-400 mb-8">
-                Уроки начинаются в 8:00. Между уроками — перемены от 5 до 20 минут.
+                Уроки начинаются в 8:15. Между уроками — перемены от 5 до 20 минут.
               </p>
 
               <div className="space-y-2">
