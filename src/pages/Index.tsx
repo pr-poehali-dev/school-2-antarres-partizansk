@@ -66,58 +66,159 @@ function Stars() {
   );
 }
 
-// ── Login Modal ────────────────────────────────────────────────────────────────
-function LoginModal({ role, onClose }: { role: "teacher" | "parent"; onClose: () => void }) {
-  const [login, setLogin] = useState("");
+const AUTH_URL = "https://functions.poehali.dev/6f8ea891-3b1d-4cbf-b66a-1ab49100e984";
+
+const ROLE_OPTIONS = [
+  { value: "student", label: "Ученик", emoji: "🎒" },
+  { value: "parent", label: "Родитель", emoji: "👨‍👩‍👧" },
+  { value: "teacher", label: "Учитель", emoji: "👩‍🏫" },
+  { value: "director", label: "Директор", emoji: "🏫" },
+];
+
+// ── Auth Modal ────────────────────────────────────────────────────────────────
+type AuthUser = { user_id: number; name: string; role: string; class_name?: string; token: string };
+
+function AuthModal({ onClose, onLogin }: { onClose: () => void; onLogin: (user: AuthUser) => void }) {
+  const [tab, setTab] = useState<"login" | "register">("login");
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
+
+  // Login fields
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  // Register fields
+  const [regName, setRegName] = useState("");
+  const [regEmail, setRegEmail] = useState("");
+  const [regPassword, setRegPassword] = useState("");
+  const [regRole, setRegRole] = useState("student");
+  const [regClass, setRegClass] = useState("");
+
+  const inputCls = "w-full bg-white/5 border border-amber-500/20 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 transition-colors text-sm";
+  const labelCls = "text-xs text-amber-500/70 uppercase tracking-widest mb-1.5 block";
+
+  const handleLogin = async () => {
+    setErrorMsg(""); setLoading(true);
+    try {
+      const res = await fetch(AUTH_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "login", email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setErrorMsg(data.error || "Ошибка входа"); return; }
+      localStorage.setItem("school_user", JSON.stringify(data));
+      onLogin(data);
+      onClose();
+    } finally { setLoading(false); }
+  };
+
+  const handleRegister = async () => {
+    setErrorMsg(""); setLoading(true);
+    try {
+      const res = await fetch(AUTH_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "register", name: regName, email: regEmail, password: regPassword, role: regRole, class_name: regClass || undefined }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setErrorMsg(data.error || "Ошибка регистрации"); return; }
+      setSuccessMsg(data.message);
+      setTab("login");
+    } finally { setLoading(false); }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-[#0d1b3e] border border-amber-500/30 rounded-3xl p-8 w-full max-w-md animate-scale-in">
+      <div className="relative bg-[#0d1b3e] border border-amber-500/30 rounded-3xl p-8 w-full max-w-md animate-scale-in max-h-[90vh] overflow-y-auto">
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-orange-400 to-amber-500 rounded-t-3xl" />
-
         <button onClick={onClose} className="absolute top-4 right-4 text-amber-500/60 hover:text-amber-400 transition-colors">
           <Icon name="X" size={20} />
         </button>
 
-        <div className="text-center mb-8">
-          <div className="text-4xl mb-3">{role === "teacher" ? "👩‍🏫" : "👨‍👩‍👧"}</div>
-          <h3 className="font-display text-2xl font-bold text-amber-400">
-            {role === "teacher" ? "Кабинет учителя" : "Кабинет родителя"}
-          </h3>
-          <p className="text-slate-400 text-sm mt-1">Введите данные для входа</p>
+        <div className="text-center mb-6">
+          <div className="text-4xl mb-2">⭐</div>
+          <h3 className="font-display text-2xl font-bold text-amber-400">Антарес</h3>
+          <p className="text-slate-400 text-sm mt-1">Личный кабинет</p>
         </div>
 
-        <div className="space-y-4">
-          <div>
-            <label className="text-xs text-amber-500/70 uppercase tracking-widest mb-2 block">Логин</label>
-            <input
-              type="text"
-              value={login}
-              onChange={(e) => setLogin(e.target.value)}
-              className="w-full bg-white/5 border border-amber-500/20 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 transition-colors"
-              placeholder="Введите логин"
-            />
-          </div>
-          <div>
-            <label className="text-xs text-amber-500/70 uppercase tracking-widest mb-2 block">Пароль</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-white/5 border border-amber-500/20 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 transition-colors"
-              placeholder="Введите пароль"
-            />
-          </div>
-          <button className="w-full bg-amber-500 hover:bg-amber-400 text-[#0d1b3e] font-bold py-3 rounded-xl transition-all duration-200 hover:scale-[1.02] mt-2">
-            Войти
-          </button>
-          <p className="text-center text-slate-500 text-sm">
-            Забыли пароль?{" "}
-            <span className="text-amber-400 cursor-pointer hover:underline">Обратитесь к администратору</span>
-          </p>
+        {/* Tabs */}
+        <div className="flex bg-white/5 rounded-xl p-1 mb-6">
+          {(["login", "register"] as const).map((t) => (
+            <button key={t} onClick={() => { setTab(t); setErrorMsg(""); setSuccessMsg(""); }}
+              className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${tab === t ? "bg-amber-500 text-[#0d1b3e]" : "text-slate-400 hover:text-white"}`}>
+              {t === "login" ? "Войти" : "Регистрация"}
+            </button>
+          ))}
         </div>
+
+        {successMsg && (
+          <div className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-xl px-4 py-3 text-sm mb-4">{successMsg}</div>
+        )}
+        {errorMsg && (
+          <div className="bg-red-500/10 border border-red-500/30 text-red-400 rounded-xl px-4 py-3 text-sm mb-4">{errorMsg}</div>
+        )}
+
+        {tab === "login" ? (
+          <div className="space-y-4">
+            <div>
+              <label className={labelCls}>Email</label>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={inputCls} placeholder="example@mail.ru" />
+            </div>
+            <div>
+              <label className={labelCls}>Пароль</label>
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleLogin()} className={inputCls} placeholder="••••••••" />
+            </div>
+            <button onClick={handleLogin} disabled={loading}
+              className="w-full bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-[#0d1b3e] font-bold py-3 rounded-xl transition-all duration-200 hover:scale-[1.02]">
+              {loading ? "Входим..." : "Войти"}
+            </button>
+            <p className="text-center text-slate-500 text-xs">Нет аккаунта?{" "}
+              <span className="text-amber-400 cursor-pointer hover:underline" onClick={() => setTab("register")}>Зарегистрируйтесь</span>
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            <div>
+              <label className={labelCls}>Полное имя</label>
+              <input type="text" value={regName} onChange={(e) => setRegName(e.target.value)} className={inputCls} placeholder="Иванов Иван Иванович" />
+            </div>
+            <div>
+              <label className={labelCls}>Email</label>
+              <input type="email" value={regEmail} onChange={(e) => setRegEmail(e.target.value)} className={inputCls} placeholder="example@mail.ru" />
+            </div>
+            <div>
+              <label className={labelCls}>Пароль (минимум 6 символов)</label>
+              <input type="password" value={regPassword} onChange={(e) => setRegPassword(e.target.value)} className={inputCls} placeholder="••••••••" />
+            </div>
+            <div>
+              <label className={labelCls}>Роль</label>
+              <div className="grid grid-cols-2 gap-2">
+                {ROLE_OPTIONS.map((r) => (
+                  <button key={r.value} onClick={() => setRegRole(r.value)}
+                    className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-sm transition-all ${regRole === r.value ? "bg-amber-500/15 border-amber-500/60 text-amber-300" : "bg-white/3 border-white/10 text-slate-400 hover:border-amber-500/30"}`}>
+                    <span>{r.emoji}</span><span>{r.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+            {regRole === "student" && (
+              <div>
+                <label className={labelCls}>Класс</label>
+                <input type="text" value={regClass} onChange={(e) => setRegClass(e.target.value)} className={inputCls} placeholder="6А" />
+              </div>
+            )}
+            <button onClick={handleRegister} disabled={loading}
+              className="w-full bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-[#0d1b3e] font-bold py-3 rounded-xl transition-all duration-200 hover:scale-[1.02]">
+              {loading ? "Отправляем..." : "Зарегистрироваться"}
+            </button>
+            <p className="text-center text-slate-500 text-xs">Уже есть аккаунт?{" "}
+              <span className="text-amber-400 cursor-pointer hover:underline" onClick={() => setTab("login")}>Войти</span>
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -127,9 +228,17 @@ function LoginModal({ role, onClose }: { role: "teacher" | "parent"; onClose: ()
 export default function Index() {
   const [activeSection, setActiveSection] = useState<Section>("home");
   const [menuOpen, setMenuOpen] = useState(false);
-  const [loginModal, setLoginModal] = useState<"teacher" | "parent" | null>(null);
+  const [authOpen, setAuthOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(() => {
+    try { return JSON.parse(localStorage.getItem("school_user") || "null"); } catch { return null; }
+  });
   const [scrolled, setScrolled] = useState(false);
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
+
+  const handleLogout = () => {
+    localStorage.removeItem("school_user");
+    setCurrentUser(null);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -202,20 +311,23 @@ export default function Index() {
             </div>
 
             <div className="hidden md:flex items-center gap-2">
-              <button
-                onClick={() => setLoginModal("teacher")}
-                className="flex items-center gap-2 bg-white/5 hover:bg-amber-500/10 border border-white/10 hover:border-amber-500/40 px-3 py-2 rounded-xl text-sm text-slate-300 hover:text-amber-300 transition-all duration-200"
-              >
-                <Icon name="GraduationCap" size={15} />
-                <span>Учитель</span>
-              </button>
-              <button
-                onClick={() => setLoginModal("parent")}
-                className="flex items-center gap-2 bg-amber-500 hover:bg-amber-400 px-3 py-2 rounded-xl text-sm font-semibold text-[#060e1f] transition-all duration-200 hover:scale-105"
-              >
-                <Icon name="Users" size={15} />
-                <span>Родитель</span>
-              </button>
+              {currentUser ? (
+                <div className="flex items-center gap-2">
+                  <div className="text-right">
+                    <div className="text-amber-400 text-sm font-medium leading-tight">{currentUser.name}</div>
+                    <div className="text-slate-500 text-xs leading-tight capitalize">{ROLE_OPTIONS.find(r => r.value === currentUser.role)?.label}</div>
+                  </div>
+                  <button onClick={handleLogout} className="bg-white/5 border border-white/10 hover:border-red-500/40 px-3 py-2 rounded-xl text-sm text-slate-400 hover:text-red-400 transition-all">
+                    <Icon name="LogOut" size={15} />
+                  </button>
+                </div>
+              ) : (
+                <button onClick={() => setAuthOpen(true)}
+                  className="flex items-center gap-2 bg-amber-500 hover:bg-amber-400 px-4 py-2 rounded-xl text-sm font-semibold text-[#060e1f] transition-all duration-200 hover:scale-105">
+                  <Icon name="LogIn" size={15} />
+                  <span>Войти</span>
+                </button>
+              )}
             </div>
 
             <button
@@ -243,13 +355,17 @@ export default function Index() {
                   {item.label}
                 </button>
               ))}
-              <div className="border-t border-white/10 mt-2 pt-2 flex gap-2">
-                <button onClick={() => setLoginModal("teacher")} className="flex-1 bg-white/5 border border-white/10 py-2 rounded-xl text-sm text-slate-300">
-                  👩‍🏫 Учитель
-                </button>
-                <button onClick={() => setLoginModal("parent")} className="flex-1 bg-amber-500 py-2 rounded-xl text-sm font-semibold text-[#060e1f]">
-                  👨‍👩‍👧 Родитель
-                </button>
+              <div className="border-t border-white/10 mt-2 pt-2">
+                {currentUser ? (
+                  <div className="flex items-center justify-between px-2 py-1">
+                    <span className="text-amber-400 text-sm">{currentUser.name}</span>
+                    <button onClick={handleLogout} className="text-slate-400 hover:text-red-400 text-xs transition-colors">Выйти</button>
+                  </div>
+                ) : (
+                  <button onClick={() => { setAuthOpen(true); setMenuOpen(false); }} className="w-full bg-amber-500 py-2 rounded-xl text-sm font-semibold text-[#060e1f]">
+                    Войти / Зарегистрироваться
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -473,7 +589,7 @@ export default function Index() {
               Оценки, расписание, уведомления об отсутствии и связь с классным руководителем — всё в одном месте.
             </p>
             <button
-              onClick={() => setLoginModal("parent")}
+              onClick={() => setAuthOpen(true)}
               className="bg-amber-500 hover:bg-amber-400 text-[#060e1f] font-bold px-8 py-3 rounded-2xl transition-all duration-200 hover:scale-105 inline-flex items-center gap-2"
             >
               <Icon name="LogIn" size={18} />
@@ -619,9 +735,9 @@ export default function Index() {
         </div>
       </footer>
 
-      {/* ── LOGIN MODAL ────────────────────────────────────────────── */}
-      {loginModal && (
-        <LoginModal role={loginModal} onClose={() => setLoginModal(null)} />
+      {/* ── AUTH MODAL ─────────────────────────────────────────────── */}
+      {authOpen && (
+        <AuthModal onClose={() => setAuthOpen(false)} onLogin={(u) => setCurrentUser(u)} />
       )}
     </div>
   );
