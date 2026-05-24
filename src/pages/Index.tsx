@@ -2,27 +2,19 @@ import { useState, useEffect, useRef } from "react";
 import Icon from "@/components/ui/icon";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
-type Section = "home" | "about" | "teachers" | "schedule" | "parents" | "contacts" | "news";
+type Section = "home" | "about" | "schedule" | "parents" | "contacts" | "news";
 
 // ── Data ───────────────────────────────────────────────────────────────────────
 const NAV_ITEMS: { id: Section; label: string }[] = [
   { id: "home", label: "Главная" },
   { id: "about", label: "О школе" },
-  { id: "teachers", label: "Учителя" },
   { id: "schedule", label: "Расписание" },
   { id: "parents", label: "Родителям" },
   { id: "news", label: "Новости" },
   { id: "contacts", label: "Контакты" },
 ];
 
-const TEACHERS = [
-  { name: "Иванова Мария Сергеевна", subject: "Математика", emoji: "📐", exp: "18 лет" },
-  { name: "Петров Алексей Владимирович", subject: "История", emoji: "📜", exp: "12 лет" },
-  { name: "Сидорова Елена Николаевна", subject: "Русский язык", emoji: "✍️", exp: "22 года" },
-  { name: "Кузнецова Анна Дмитриевна", subject: "Биология", emoji: "🌿", exp: "9 лет" },
-  { name: "Морозов Игорь Павлович", subject: "Физика", emoji: "⚛️", exp: "15 лет" },
-  { name: "Волкова Татьяна Ивановна", subject: "Английский язык", emoji: "🌍", exp: "11 лет" },
-];
+
 
 const NEWS = [
   { date: "20 мая 2026", title: "Итоги городской олимпиады по математике", tag: "Достижения", emoji: "🏆" },
@@ -369,43 +361,6 @@ export default function Index() {
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── TEACHERS ───────────────────────────────────────────────── */}
-      <section ref={setRef("teachers")} className="py-24 relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="section-divider w-full mb-16" />
-
-          <div className="text-center mb-14">
-            <div className="text-amber-500/60 text-xs uppercase tracking-widest mb-4">Педагогический состав</div>
-            <h2 className="font-display text-5xl font-bold text-white">
-              Наши <span className="text-gold-gradient italic">учителя</span>
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {TEACHERS.map((t) => (
-              <div key={t.name} className="group bg-white/3 border border-white/10 hover:border-amber-500/30 rounded-3xl p-6 card-hover cursor-pointer">
-                <div className="flex items-start gap-4">
-                  <div className="w-14 h-14 bg-amber-500/10 border border-amber-500/20 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-110 transition-transform">
-                    {t.emoji}
-                  </div>
-                  <div>
-                    <div className="font-semibold text-white text-sm leading-snug mb-1">{t.name}</div>
-                    <div className="text-amber-400 text-sm font-medium">{t.subject}</div>
-                    <div className="text-slate-500 text-xs mt-1">Стаж: {t.exp}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-10">
-            <button className="border border-amber-500/30 text-amber-400 hover:bg-amber-500/10 px-6 py-3 rounded-2xl text-sm transition-all duration-200">
-              Весь педагогический состав →
-            </button>
           </div>
         </div>
       </section>
